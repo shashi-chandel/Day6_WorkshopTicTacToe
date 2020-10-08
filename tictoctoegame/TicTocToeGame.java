@@ -10,7 +10,6 @@ public class TicTocToeGame {
 	 * UC1
 	 */
 	static public void createBoard() {
-
 		for (int i = 0; i < 10; i++) {
 			board[i] = ' ';
 		}
@@ -56,7 +55,7 @@ public class TicTocToeGame {
 			System.out.println("Select the index from 1 to 9 to make the move");
 			location = sc.nextInt();
 			isSpaceAvailable = isSpaceFree(location);
-		} while (false);
+		} while (isSpaceAvailable = false);
 		return location;
 	}
 
@@ -90,7 +89,15 @@ public class TicTocToeGame {
 		else
 			return "ComputerTurn";
 	}
-
+	
+	static public boolean whoWins(char letter) {
+		if(((board[1]==board[2])&&(board[2]==board[3])&&(board[3]==letter))||((board[4]==board[5])&&(board[5]==board[6])&&(board[6]==letter))
+			||((board[7]==board[8])&&(board[8]==board[9])&&(board[9]==letter))||((board[1]==board[4])&&(board[4]==board[7])&&(board[7]==letter))
+			||((board[2]==board[5])&&(board[5]==board[8])&&(board[8]==letter))||((board[3]==board[6])&&(board[6]==board[9])&&(board[9]==letter))
+			||((board[3]==board[5])&&(board[5]==board[7])&&(board[7]==letter))||((board[1]==board[5])&&(board[5]==board[9])&&(board[9]==letter)))
+			return true;
+		return false;
+			}
 	/*
 	 * main
 	 */
@@ -108,5 +115,6 @@ public class TicTocToeGame {
 		int position = desiredLocation();
 		makeMove(position, userChoice);
 		String whoseChanceToPlay = checkFirstMove();
+		boolean doesUserWin = whoWins(userChoice);
 	}
 }
