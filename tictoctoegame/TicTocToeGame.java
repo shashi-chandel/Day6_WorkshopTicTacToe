@@ -6,7 +6,7 @@ public class TicTocToeGame {
 	public static char board[] = new char[10];
 	public static Scanner sc = new Scanner(System.in);
 
-	/*
+	/**
 	 * UC1
 	 */
 	static public void createBoard() {
@@ -15,8 +15,10 @@ public class TicTocToeGame {
 		}
 	}
 
-	/*
+	/**
 	 * UC2
+	 * 
+	 * @return
 	 */
 	static public char chooseLetter() {
 		System.out.println("Enter your input (X or O): ");
@@ -31,7 +33,7 @@ public class TicTocToeGame {
 		}
 	}
 
-	/*
+	/**
 	 * UC3
 	 */
 	static public void showBoard() {
@@ -45,8 +47,10 @@ public class TicTocToeGame {
 		System.out.println(" " + board[7] + " | " + board[8] + " | " + board[9] + " \n");
 	}
 
-	/*
+	/**
 	 * UC4
+	 * 
+	 * @return
 	 */
 	static public int desiredLocation() {
 		boolean isSpaceAvailable = false;
@@ -60,18 +64,24 @@ public class TicTocToeGame {
 	}
 
 	public static boolean isSpaceFree(int location) {
-		return (board[location] == ' ') ? true : false;
+		if (board[location] == ' ')
+			return true;
+		return false;
 	}
 
-	/*
+	/**
 	 * UC5
+	 * 
+	 * @param position
+	 * @param userLetter
 	 */
 	static public void makeMove(int position, char userLetter) {
 		board[position] = userLetter;
 	}
-	
+
 	/**
 	 * UC6
+	 * 
 	 * @return
 	 */
 	static public String checkFirstMove() {
@@ -84,20 +94,41 @@ public class TicTocToeGame {
 			System.out.println("Head ! Computer will move first.");
 			break;
 		}
-		if (toss==0)
+		if (toss == 0)
 			return "UserTurn";
 		else
 			return "ComputerTurn";
 	}
-	
-	static public boolean whoWins(char letter) {
-		if(((board[1]==board[2])&&(board[2]==board[3])&&(board[3]==letter))||((board[4]==board[5])&&(board[5]==board[6])&&(board[6]==letter))
-			||((board[7]==board[8])&&(board[8]==board[9])&&(board[9]==letter))||((board[1]==board[4])&&(board[4]==board[7])&&(board[7]==letter))
-			||((board[2]==board[5])&&(board[5]==board[8])&&(board[8]==letter))||((board[3]==board[6])&&(board[6]==board[9])&&(board[9]==letter))
-			||((board[3]==board[5])&&(board[5]==board[7])&&(board[7]==letter))||((board[1]==board[5])&&(board[5]==board[9])&&(board[9]==letter)))
-			return true;
-		return false;
-			}
+
+	/**
+	 * UC8
+	 * 
+	 * @param letter
+	 * @return
+	 */
+	static public String checkStatus(char letter) {
+		int index;
+		if (((board[1] == board[2]) && (board[2] == board[3]) && (board[3] == letter))
+				|| ((board[4] == board[5]) && (board[5] == board[6]) && (board[6] == letter))
+				|| ((board[7] == board[8]) && (board[8] == board[9]) && (board[9] == letter))
+				|| ((board[1] == board[4]) && (board[4] == board[7]) && (board[7] == letter))
+				|| ((board[2] == board[5]) && (board[5] == board[8]) && (board[8] == letter))
+				|| ((board[3] == board[6]) && (board[6] == board[9]) && (board[9] == letter))
+				|| ((board[3] == board[5]) && (board[5] == board[7]) && (board[7] == letter))
+				|| ((board[1] == board[5]) && (board[5] == board[9]) && (board[9] == letter)))
+			return "win";
+		for (index = 0; index <= 9; index++) {
+			if (board[index] != ' ')
+				continue;
+			else
+				break;
+		}
+		if (index == 9)
+			return "tie";
+		else
+			return "turn";
+	}
+
 	/*
 	 * main
 	 */
@@ -115,6 +146,6 @@ public class TicTocToeGame {
 		int position = desiredLocation();
 		makeMove(position, userChoice);
 		String whoseChanceToPlay = checkFirstMove();
-		boolean doesUserWin = whoWins(userChoice);
+		String status = checkStatus(userChoice);
 	}
 }
