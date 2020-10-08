@@ -32,16 +32,26 @@ public class TicTocToeGame {
 		}
 	}
 
+	/*
+	 * UC3
+	 */
+	static public void showBoard() {
+		System.out.println("Valid cells to make move: ");
+				System.out.println(board[1] +"_"+ board[2] +"_"+ board [3]+"_");
+				System.out.println(board[4] +"_"+ board[5] +"_"+ board [6]+"_");
+				System.out.println(board[7] +"_"+ board[8] +"_"+ board [9]+"_");
+			}
+	
 	public static void main(String[] args) {
 		createBoard();
 		char userChoice = chooseLetter();
 		char computerChoice;
-		System.out.println("Player input: " + userChoice);
+		System.out.println("Player Choice: " + userChoice);
 		if (userChoice == 'X')
 			computerChoice = 'O';
 		else
 			computerChoice = 'X';
-		System.out.println("Computer input: " + computerChoice);
-
+		System.out.println("Computer Choice: " + computerChoice);
+		showBoard();
 	}
 }
