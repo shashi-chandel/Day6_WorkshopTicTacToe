@@ -101,7 +101,7 @@ public class TicTocToeGame {
 	}
 
 	/**
-	 * UC7
+	 * UC8
 	 * 
 	 * @param letter
 	 * @return
@@ -129,6 +129,51 @@ public class TicTocToeGame {
 			return "turn";
 	}
 
+	/**
+	 * UC8
+	 * 
+	 * @param letter
+	 * @return
+	 */
+	public static int getIndexForSuccessfulMove(char letter) {
+		int index;
+		for (index = 1; index <= 9; index++) {
+			char[] dummyBoard = board;
+			if (dummyBoard[index] == ' ') {
+				dummyBoard[index] = letter;
+				String status = checkStatus(letter);
+				if (status.equals("win"))
+					return index;
+			} else
+				continue;
+		}
+		return 0;
+	}
+
+	/**
+	 * UC9
+	 * 
+	 * @param letter
+	 * @return
+	 */
+	public static int getIndexToBlockMove(char letter) {
+		int index;
+		char dummyLetter = 'O';
+		if (letter == dummyLetter)
+			dummyLetter = 'X';
+
+		for (index = 1; index <= 9; index++) {
+			char[] dummyBoard = board;
+			if (dummyBoard[index] == ' ') {
+				dummyBoard[index] = dummyLetter;
+				String status = checkStatus(dummyLetter);
+				if (status.equals("win"))
+					return index;
+			} else
+				continue;
+		}
+		return 0;
+	}
 	/*
 	 * main
 	 */
@@ -145,7 +190,9 @@ public class TicTocToeGame {
 		showBoard();
 		int position = desiredLocation();
 		makeMove(position, userChoice);
-		String firstChanceToPlay = checkFirstMove();
-		String gameStatusBeforeMove = checkStatus(userChoice);
+		String whoseChanceToPlay = checkFirstMove();
+		String status = checkStatus(userChoice);
+		int winningIndex = getIndexForSuccessfulMove(userChoice);
+		int blockingIndex = getIndexToBlockMove(userChoice);
 	}
 }
