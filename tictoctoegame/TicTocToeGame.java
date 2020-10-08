@@ -50,14 +50,23 @@ public class TicTocToeGame {
 	 * UC4
 	 */
 	static public int desiredLocation() {
-		System.out.println("Enter the desired location you want to make a move: ");
-		int location = sc.nextInt();
-		if (board[location] == ' ')
+			boolean isSpaceAvailable = false;
+			int location;
+			do {
+				System.out.println("Select the index from 1 to 9 to make the move");
+				location = sc.nextInt();
+				isSpaceAvailable = isSpaceFree(location);
+			} while (false);
 			return location;
-		else
-			return 0;
-	}
+		}
 
+		public static boolean isSpaceFree(int location) {
+			return (board[location] == ' ') ?  true : false;
+		}
+	
+	/*
+	 * main
+	 */
 	public static void main(String[] args) {
 		createBoard();
 		char userChoice = chooseLetter();
@@ -70,5 +79,7 @@ public class TicTocToeGame {
 		System.out.println("Computer Choice: " + computerChoice);
 		showBoard();
 		int position = desiredLocation();
+		System.out.println(position);
+		boolean result = makeMove(position);
 	}
 }
