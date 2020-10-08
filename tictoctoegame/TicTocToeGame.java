@@ -129,6 +129,26 @@ public class TicTocToeGame {
 			return "turn";
 	}
 
+	/**
+	 * UC8
+	 * @param letter
+	 * @return
+	 */
+	public static int getIndexForSuccessfulMove(char letter) {
+		int index;
+		for (index = 1; index <= 9; index++) {
+			char[] dummyBoard = board;
+			if (dummyBoard[index] == ' ') {
+				dummyBoard[index] = letter;
+				String status = checkStatus(letter);
+				if (status.equals("win"))
+					return index;
+			} else
+				continue;
+		}
+		return 0;
+	}
+
 	/*
 	 * main
 	 */
@@ -147,5 +167,6 @@ public class TicTocToeGame {
 		makeMove(position, userChoice);
 		String whoseChanceToPlay = checkFirstMove();
 		String status = checkStatus(userChoice);
+		int winningIndex = getIndexForSuccessfulMove(userChoice);
 	}
 }
