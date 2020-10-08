@@ -70,6 +70,26 @@ public class TicTocToeGame {
 	static public void makeMove(int position, char userLetter) {
 		board[position] = userLetter;
 	}
+	
+	/**
+	 * UC6
+	 * @return
+	 */
+	static public String checkFirstMove() {
+		int toss = (int) (Math.random() * 10) % 2;
+		switch (toss) {
+		case 0:
+			System.out.println("Tail ! Player will move first.");
+			break;
+		case 1:
+			System.out.println("Head ! Computer will move first.");
+			break;
+		}
+		if (toss==0)
+			return "UserTurn";
+		else
+			return "ComputerTurn";
+	}
 
 	/*
 	 * main
@@ -86,8 +106,7 @@ public class TicTocToeGame {
 		System.out.println("Computer Choice: " + computerChoice);
 		showBoard();
 		int position = desiredLocation();
-		System.out.println(position);
 		makeMove(position, userChoice);
-		
+		String whoseChanceToPlay = checkFirstMove();
 	}
 }
