@@ -2,6 +2,10 @@ package com.capgemini.tictoctoegame;
 
 import java.util.Scanner;
 
+/**
+ * @author shashi7
+ *
+ */
 public class TicTocToeGame {
 	public static char board[] = new char[10];
 	public static Scanner sc = new Scanner(System.in);
@@ -161,18 +165,36 @@ public class TicTocToeGame {
 		char dummyLetter = 'O';
 		if (letter == dummyLetter)
 			dummyLetter = 'X';
+		return getIndexForSuccessfulMove(dummyLetter);
+	}
 
-		for (index = 1; index <= 9; index++) {
-			char[] dummyBoard = board;
-			if (dummyBoard[index] == ' ') {
-				dummyBoard[index] = dummyLetter;
-				String status = checkStatus(dummyLetter);
-				if (status.equals("win"))
-					return index;
-			} else
-				continue;
+	/**
+	 * UC10
+	 * 
+	 * @return
+	 */
+	public static int availableCorner() {
+		int[] cornerPosition = { 1, 3, 7, 9 };
+		for (int index : cornerPosition) {
+			if (board[index] == ' ')
+				return index;
 		}
-		return 0;
+		return -1;
+	}
+
+	/**
+	 * UC11
+	 * @return
+	 */
+	public static int subsequentChoice() {
+		if (board[5] == ' ')
+			return 5;
+		else
+			for (int side = 2; side < 9; side = side + 2) {
+				if (board[side] == ' ')
+					return side;
+			}
+		return -1;
 	}
 
 	/*
@@ -180,6 +202,7 @@ public class TicTocToeGame {
 	 */
 	public static void main(String[] args) {
 		createBoard();
+		int subsequentIndex;
 		char userChoice = chooseLetter();
 		char computerChoice;
 		System.out.println("Player Choice: " + userChoice);
@@ -195,5 +218,8 @@ public class TicTocToeGame {
 		String status = checkStatus(userChoice);
 		int winningIndex = getIndexForSuccessfulMove(userChoice);
 		int blockingIndex = getIndexToBlockMove(userChoice);
+		int cornerIndex = availableCorner();
+		if(cornerIndex<0)
+		subsequentIndex = subsequentChoice();
 	}
 }
