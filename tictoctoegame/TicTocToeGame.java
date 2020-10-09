@@ -7,16 +7,21 @@ import java.util.Scanner;
  *
  */
 public class TicTocToeGame {
-	public static char board[] = new char[10];
 	public static Scanner sc = new Scanner(System.in);
+	public enum Players {
+		COMPUTER, PLAYER
+	}
+
 
 	/**
 	 * UC1
 	 */
-	static public void createBoard() {
+	static public char[] createBoard() {
+		char[] board = new char[10];
 		for (int i = 0; i < 10; i++) {
 			board[i] = ' ';
 		}
+		return board;
 	}
 
 	/**
@@ -25,62 +30,69 @@ public class TicTocToeGame {
 	 * @return
 	 */
 	static public char chooseLetter() {
-		System.out.println("Enter your input (X or O): ");
-		char input = sc.next().charAt(0);
+		boolean entry = false;
+		char input;
+		while (true) {
+			System.out.println("Enter your input (X or O): ");
+			input = sc.next().charAt(0);
 		if (input == 'X')
 			return 'X';
 		if (input == 'O')
 			return 'O';
 		else {
-			System.out.println("Invalid input");
-			return 0;
+			System.out.println("Invalid input!");
+			entry = true;
+		     }
 		}
 	}
 
 	/**
 	 * UC3
+	 * @param board
 	 */
-	static public void showBoard() {
-		for (int i = 1; i < 10; i++) {
-			if (board[i] == ' ')
-				board[i] = '_';
-		}
+	static public void showBoard(char[] board) {
 		System.out.println("Valid cells to make move: ");
-		System.out.println(" " + board[1] + " | " + board[2] + " | " + board[3] + " \n");
-		System.out.println(" " + board[4] + " | " + board[5] + " | " + board[6] + " \n");
-		System.out.println(" " + board[7] + " | " + board[8] + " | " + board[9] + " \n");
+		System.out.println(" " + board[1] + " | " + board[2] + " | " + board[3] );
+		System.out.println("---+---+---");
+		System.out.println(" " + board[4] + " | " + board[5] + " | " + board[6] );
+		System.out.println("---+---+---");
+		System.out.println(" " + board[7] + " | " + board[8] + " | " + board[9] );
 	}
 
 	/**
 	 * UC4
-	 * 
+	 * @param board
 	 * @return
 	 */
-	static public int desiredLocation() {
+	static public int getMove(char[] board) {
 		boolean isSpaceAvailable = false;
-		int location;
-		do {
+		int location = 0;
+		while (true) {
 			System.out.println("Select the index from 1 to 9 to make the move");
 			location = sc.nextInt();
-			isSpaceAvailable = isSpaceFree(location);
-		} while (isSpaceAvailable = false);
+			isSpaceAvailable = isSpaceFree(board,location);
+			if(isSpaceAvailable)
+				break;
+		}
 		return location;
 	}
 
-	public static boolean isSpaceFree(int location) {
-		if (board[location] == ' ')
+	public static boolean isSpaceFree(char[] board, int location) {
+		if (board[location] == ' ') 
 			return true;
 		return false;
 	}
 
 	/**
 	 * UC5
-	 * 
-	 * @param position
+	 * @param board
+	 * @param location
 	 * @param userLetter
+	 * @return
 	 */
-	static public void makeMove(int position, char userLetter) {
-		board[position] = userLetter;
+	static public char[] makeMove(char[] board, int location, char userLetter) {
+		board[location] = userLetter;
+		return board;
 	}
 
 	/**
@@ -88,29 +100,30 @@ public class TicTocToeGame {
 	 * 
 	 * @return
 	 */
-	static public String checkFirstMove() {
+	static public Players checkWhoPlaysFirst() {
 		int toss = (int) (Math.random() * 10) % 2;
+		System.out.println("\n Coin is tossed.");
 		switch (toss) {
-		case 0:
-			System.out.println("Tail ! Player will move first.");
-			break;
 		case 1:
-			System.out.println("Head ! Computer will move first.");
+			System.out.println("Head ! Player will move first.");
+			break;
+		case 0:
+			System.out.println("Tail ! Computer will move first.");
 			break;
 		}
-		if (toss == 0)
-			return "UserTurn";
+		if (toss == 1)
+			return Players.PLAYER;
 		else
-			return "ComputerTurn";
-	}
+			return Players.COMPUTER;	
+		}
 
 	/**
 	 * UC7
-	 * 
+	 * @param board
 	 * @param letter
 	 * @return
 	 */
-	static public String checkStatus(char letter) {
+	static public String checkStatus(char[] board, char letter) {
 		int index;
 		if (((board[1] == board[2]) && (board[2] == board[3]) && (board[3] == letter))
 				|| ((board[4] == board[5]) && (board[5] == board[6]) && (board[6] == letter))
@@ -121,7 +134,7 @@ public class TicTocToeGame {
 				|| ((board[3] == board[5]) && (board[5] == board[7]) && (board[7] == letter))
 				|| ((board[1] == board[5]) && (board[5] == board[9]) && (board[9] == letter)))
 			return "win";
-		for (index = 0; index <= 9; index++) {
+		for (index = 1; index <= 9; index++) {
 			if (board[index] != ' ')
 				continue;
 			else
@@ -135,21 +148,20 @@ public class TicTocToeGame {
 
 	/**
 	 * UC8
-	 * 
+	 * @param board
 	 * @param letter
 	 * @return
 	 */
-	public static int getIndexForSuccessfulMove(char letter) {
+	public static int successfulMoveIndex(char[] board, char letter) {
 		int index;
 		for (index = 1; index <= 9; index++) {
-			char[] dummyBoard = board;
+			char[] dummyBoard = board.clone();
 			if (dummyBoard[index] == ' ') {
 				dummyBoard[index] = letter;
-				String status = checkStatus(letter);
+				String status = checkStatus(dummyBoard, letter);
 				if (status.equals("win"))
 					return index;
-			} else
-				continue;
+			}
 		}
 		return 0;
 	}
@@ -160,12 +172,11 @@ public class TicTocToeGame {
 	 * @param letter
 	 * @return
 	 */
-	public static int getIndexToBlockMove(char letter) {
-		int index;
+	public static int blockingMoveIndex(char[] board, char letter) {
 		char dummyLetter = 'O';
 		if (letter == dummyLetter)
 			dummyLetter = 'X';
-		return getIndexForSuccessfulMove(dummyLetter);
+		return successfulMoveIndex(board, dummyLetter);
 	}
 
 	/**
@@ -173,53 +184,57 @@ public class TicTocToeGame {
 	 * 
 	 * @return
 	 */
-	public static int availableCorner() {
-		int[] cornerPosition = { 1, 3, 7, 9 };
-		for (int index : cornerPosition) {
-			if (board[index] == ' ')
-				return index;
-		}
-		return -1;
+	public static int availableCorner(char[] board) {
+		if (board[1] == ' ')
+			return 1;
+		if (board[3] == ' ')
+			return 3;
+		if (board[7] == ' ')
+			return 7;
+		if (board[9] == ' ')
+			return 9;
+		else
+			return 0;
 	}
 
 	/**
 	 * UC11
+	 * @param board
+	 * @param computerLetter
 	 * @return
 	 */
-	public static int subsequentChoice() {
-		if (board[5] == ' ')
-			return 5;
-		else
-			for (int side = 2; side < 9; side = side + 2) {
-				if (board[side] == ' ')
-					return side;
+	public static char[] computerTurn(char[] board, char computerLetter) {
+		int index = successfulMoveIndex(board, computerLetter);
+		if (index != 0) {
+			board = makeMove(board, index, computerLetter);
+			return board;
+		}
+		index = blockingMoveIndex(board, computerLetter);
+		if (index != 0) {
+			board = makeMove(board, index, computerLetter);
+			return board;
+		}
+		index = availableCorner(board);
+		if (index != 0) {
+			board = makeMove(board, index, computerLetter);
+			return board;
+		}
+		if (isSpaceFree(board, 5)) {
+			board = makeMove(board, index, computerLetter);
+			return board;
+		} else {
+			for (int side = 2; side <= 8; side++) {
+				if (isSpaceFree(board, side)) {
+					board = makeMove(board, index, computerLetter);
+					break;
+				}
+				side++;
 			}
-		return -1;
-	}
-
-	/*
-	 * main
-	 */
-	public static void main(String[] args) {
-		createBoard();
-		int subsequentIndex;
-		char userChoice = chooseLetter();
-		char computerChoice;
-		System.out.println("Player Choice: " + userChoice);
-		if (userChoice == 'X')
-			computerChoice = 'O';
-		else
-			computerChoice = 'X';
-		System.out.println("Computer Choice: " + computerChoice);
-		showBoard();
-		int position = desiredLocation();
-		makeMove(position, userChoice);
-		String whoseChanceToPlay = checkFirstMove();
-		String status = checkStatus(userChoice);
-		int winningIndex = getIndexForSuccessfulMove(userChoice);
-		int blockingIndex = getIndexToBlockMove(userChoice);
-		int cornerIndex = availableCorner();
-		if(cornerIndex<0)
-		subsequentIndex = subsequentChoice();
+			return board;
+		}
 	}
 }
+		
+	
+	
+	
