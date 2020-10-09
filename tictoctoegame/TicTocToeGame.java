@@ -8,10 +8,10 @@ import java.util.Scanner;
  */
 public class TicTocToeGame {
 	public static Scanner sc = new Scanner(System.in);
+
 	public enum Players {
 		COMPUTER, PLAYER
 	}
-
 
 	/**
 	 * UC1
@@ -35,32 +35,34 @@ public class TicTocToeGame {
 		while (true) {
 			System.out.println("Enter your input (X or O): ");
 			input = sc.next().charAt(0);
-		if (input == 'X')
-			return 'X';
-		if (input == 'O')
-			return 'O';
-		else {
-			System.out.println("Invalid input!");
-			entry = true;
-		     }
+			if (input == 'X')
+				return 'X';
+			if (input == 'O')
+				return 'O';
+			else {
+				System.out.println("Invalid input!");
+				entry = true;
+			}
 		}
 	}
 
 	/**
 	 * UC3
+	 * 
 	 * @param board
 	 */
 	static public void showBoard(char[] board) {
 		System.out.println("Valid cells to make move: ");
-		System.out.println(" " + board[1] + " | " + board[2] + " | " + board[3] );
+		System.out.println(" " + board[1] + " | " + board[2] + " | " + board[3]);
 		System.out.println("---+---+---");
-		System.out.println(" " + board[4] + " | " + board[5] + " | " + board[6] );
+		System.out.println(" " + board[4] + " | " + board[5] + " | " + board[6]);
 		System.out.println("---+---+---");
-		System.out.println(" " + board[7] + " | " + board[8] + " | " + board[9] );
+		System.out.println(" " + board[7] + " | " + board[8] + " | " + board[9]);
 	}
 
 	/**
 	 * UC4
+	 * 
 	 * @param board
 	 * @return
 	 */
@@ -70,21 +72,22 @@ public class TicTocToeGame {
 		while (true) {
 			System.out.println("Select the index from 1 to 9 to make the move");
 			location = sc.nextInt();
-			isSpaceAvailable = isSpaceFree(board,location);
-			if(isSpaceAvailable)
+			isSpaceAvailable = isSpaceFree(board, location);
+			if (isSpaceAvailable)
 				break;
 		}
 		return location;
 	}
 
 	public static boolean isSpaceFree(char[] board, int location) {
-		if (board[location] == ' ') 
+		if (board[location] == ' ')
 			return true;
 		return false;
 	}
 
 	/**
 	 * UC5
+	 * 
 	 * @param board
 	 * @param location
 	 * @param userLetter
@@ -114,11 +117,12 @@ public class TicTocToeGame {
 		if (toss == 1)
 			return Players.PLAYER;
 		else
-			return Players.COMPUTER;	
-		}
+			return Players.COMPUTER;
+	}
 
 	/**
 	 * UC7
+	 * 
 	 * @param board
 	 * @param letter
 	 * @return
@@ -148,6 +152,7 @@ public class TicTocToeGame {
 
 	/**
 	 * UC8
+	 * 
 	 * @param board
 	 * @param letter
 	 * @return
@@ -199,6 +204,7 @@ public class TicTocToeGame {
 
 	/**
 	 * UC11
+	 * 
 	 * @param board
 	 * @param computerLetter
 	 * @return
@@ -233,8 +239,53 @@ public class TicTocToeGame {
 			return board;
 		}
 	}
+
+	/**
+	 * UC12
+	 */
+	public static void newGame() {
+		char[] board = createBoard();
+		char computerChoice = ' ';
+		int movePosition = 0;
+		int maxTurns = 9;
+		char playerChoice = chooseLetter();
+		if (playerChoice == 'X') {
+			computerChoice = 'O';
+			System.out.println("Player has chosen " + playerChoice + " and Computer has chosen O");
+		} else {
+			computerChoice = 'X';
+			System.out.println("Player has chosen " + playerChoice + " and Computer has chosen X");
+		}
+		Players firstMove = checkWhoPlaysFirst();
+		String winner = " ";
+
+		do {
+			maxTurns--;
+			if (firstMove == Players.COMPUTER) {
+				board = computerTurn(board, computerChoice);
+				if (checkStatus(board, computerChoice).equals("win")) {
+					winner = "computer";
+					break;
+				}
+				firstMove = Players.PLAYER;
+			} else {
+				showBoard(board);
+				movePosition = getMove(board);
+				board = makeMove(board, movePosition, playerChoice);
+				if (checkStatus(board, playerChoice).equals("win")) {
+					winner = "player";
+					break;
+				}
+				firstMove = Players.COMPUTER;
+			}
+		} while (maxTurns > 0);
+
+		showBoard(board);
+		if (winner == "computer")
+			System.out.println("Computer won !!");
+		else if (winner == "player")
+			System.out.println("Player won !!");
+		else
+			System.out.println("Game Tied !!");
+	}
 }
-		
-	
-	
-	
