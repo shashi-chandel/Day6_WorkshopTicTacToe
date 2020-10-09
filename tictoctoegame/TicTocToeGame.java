@@ -30,7 +30,6 @@ public class TicTocToeGame {
 	 * @return
 	 */
 	static public char chooseLetter() {
-		boolean entry = false;
 		char input;
 		while (true) {
 			System.out.println("Enter your input (X or O): ");
@@ -41,7 +40,6 @@ public class TicTocToeGame {
 				return 'O';
 			else {
 				System.out.println("Invalid input!");
-				entry = true;
 			}
 		}
 	}
@@ -287,5 +285,20 @@ public class TicTocToeGame {
 			System.out.println("Player won !!");
 		else
 			System.out.println("Game Tied !!");
+	}
+
+	/**
+	 * UC13
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		char choice;
+		do {
+			newGame();
+			System.out.println("Want to play More !!  (y/n) ");
+			choice = sc.next().charAt(0);
+		} while (choice == 'y');
+
 	}
 }
