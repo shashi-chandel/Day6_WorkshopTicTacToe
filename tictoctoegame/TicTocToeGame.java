@@ -101,7 +101,7 @@ public class TicTocToeGame {
 	}
 
 	/**
-	 * UC8
+	 * UC7
 	 * 
 	 * @param letter
 	 * @return
@@ -174,6 +174,7 @@ public class TicTocToeGame {
 		}
 		return 0;
 	}
+
 	/*
 	 * main
 	 */
